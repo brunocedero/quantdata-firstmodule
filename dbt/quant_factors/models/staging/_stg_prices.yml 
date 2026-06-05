@@ -1,0 +1,32 @@
+-- Staging: una vista delgada sobre raw.prices.
+-- Reglas de esta capa (convención del modern data stack):
+--   * 1 modelo de staging por tabla de origen
+--   * solo limpieza/renombrado/casteo, NADA de lógica de negocio
+--   * sin joins ni agregaciones (eso va más adelante)
+--
+-- Para factor research usamos SIEMPRE los precios ajustados (adj_*), porque
+-- corrigen splits y dividendos. Usar el close sin ajustar metería saltos
+-- artificiales en los retornos el día de un split: un error clásico.
+
+version: 2
+
+models:
+  - name: stg_prices
+    description: "Precios EOD limpios y ajustados por splits/dividendos. Grano: un día por ticker."
+    columns:
+      - name: ticker
+        description: "Símbolo de la acción."
+        tests:
+          - not_null
+      - name: date
+        description: "Fecha de la sesión bursátil."
+        tests:
+          - not_null
+      # combinación ticker+date debe ser única: no puede haber dos filas para el
+      # mismo ticker el mismo día. Este test atrapa duplicados de la ingesta.
+      - name: close
+        description: "Precio de cierre ajustado."
+        tests:
+          - not_null
+    # La unicidad de (ticker, date) se valida con un test singular en tests/
+    # (assert_unique_ticker_date.sql), sin depender de paquetes externos.

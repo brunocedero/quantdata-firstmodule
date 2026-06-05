@@ -1,0 +1,13 @@
+# Apunta dbt al warehouse postgres-dw. Va dentro de ./dbt para versionarlo.
+quant_factors:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('WAREHOUSE_HOST', 'postgres-dw') }}"
+      port: 5432
+      user: "{{ env_var('WAREHOUSE_USER', 'quant') }}"
+      password: "{{ env_var('WAREHOUSE_PASSWORD', 'quant') }}"
+      dbname: "{{ env_var('WAREHOUSE_DB', 'quant') }}"
+      schema: analytics    # staging y marts viven acá; raw lo carga la ingesta
+      threads: 4

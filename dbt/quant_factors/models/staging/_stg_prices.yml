@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: stg_prices
+    description: "Precios EOD limpios y ajustados por splits/dividendos. Grano: un día por ticker."
+    columns:
+      - name: ticker
+        description: "Símbolo de la acción."
+        data_tests:
+          - not_null
+      - name: date
+        description: "Fecha de la sesión bursátil."
+        data_tests:
+          - not_null
+      - name: close
+        description: "Precio de cierre ajustado."
+        data_tests:
+          - not_null

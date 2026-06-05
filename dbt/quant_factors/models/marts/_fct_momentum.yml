@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: fct_momentum
+    description: >
+      Factor momentum 12-1 por ticker y fecha: retorno acumulado de los últimos
+      ~12 meses excluyendo el mes más reciente. Señal base para ranking de acciones.
+    columns:
+      - name: ticker
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+      - name: momentum_12_1
+        description: "Momentum como retorno simple acumulado (exp(suma log) - 1)."
+        tests:
+          - not_null
+    # Unicidad de (ticker, date) validada en tests/assert_unique_ticker_date.sql

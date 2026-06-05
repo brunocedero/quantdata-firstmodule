@@ -1,0 +1,20 @@
+name: quant_factors
+version: "1.0.0"
+profile: quant_factors
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+packages-install-path: /opt/airflow/dbt_artifacts/packages
+clean-targets: ["/opt/airflow/dbt_artifacts/target", "/opt/airflow/dbt_artifacts/packages"]
+
+models:
+  quant_factors:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table

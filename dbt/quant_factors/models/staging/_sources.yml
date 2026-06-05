@@ -1,0 +1,16 @@
+version: 2
+
+# Declara raw.prices (la tabla que carga Airflow) como una "source" de dbt.
+# Permite referenciarla con {{ source('raw', 'prices') }} y la incluye en el linaje.
+sources:
+  - name: raw
+    schema: raw
+    description: "Datos crudos cargados por la ingesta de Airflow, sin transformar."
+    tables:
+      - name: prices
+        description: "Precios EOD desde Tiingo. Clave (ticker, date)."
+        columns:
+          - name: ticker
+            data_tests: [not_null]
+          - name: date
+            data_tests: [not_null]
